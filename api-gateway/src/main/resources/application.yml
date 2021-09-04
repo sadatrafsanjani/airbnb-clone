@@ -1,0 +1,51 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: RENTAL-PROCESSOR
+          uri: lb://RENTAL-PROCESSOR
+          predicates:
+            - Path=/api/rental/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: RENTAL-PROCESSOR
+                fallBackUri: forward:/rentalProcessorFallBack
+        - id: RENTAL-SEARCH
+          uri: lb://RENTAL-SEARCH
+          predicates:
+            - Path=/api/search/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: RENTAL-SEARCH
+                fallBackUri: forward:/rentalSearchFallBack
+
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMiliseconds: 4000
+
+
+manageemnt:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
