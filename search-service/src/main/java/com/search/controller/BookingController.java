@@ -23,12 +23,6 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping("/test")
-    public String test(){
-
-        return "Search Service Testing";
-    }
-
     @PostMapping
     ResponseEntity<BookingResponse> saveBooking(@RequestBody BookingRequest request) {
 

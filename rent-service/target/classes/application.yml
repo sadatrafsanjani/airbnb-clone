@@ -1,0 +1,28 @@
+server:
+  port: 9001
+
+spring:
+  mail:
+    host: smtp.mailtrap.io
+    port: 587
+    username: 0fef9003c9fde2
+    password: ca86576b238fe5
+    properties:
+      mail:
+        smtp:
+          auth: PLAIN
+          starttls:
+            enable: true
+    protocol: smtp
+    tls: true
+  application:
+    name: RENTAL-PROCESSOR
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost

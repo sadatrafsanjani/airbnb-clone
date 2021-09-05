@@ -1,8 +1,6 @@
 package com.search.service;
 
-import com.search.dto.request.BookingRequest;
 import com.search.dto.request.SearchRequest;
-import com.search.dto.response.BookingResponse;
 import com.search.dto.response.HouseResponse;
 import com.search.model.House;
 import com.search.repository.BookingRepository;
@@ -68,15 +66,18 @@ public class SearchServiceImpl implements SearchService {
         return responses;
     }
 
-    /* Search By Geolocation */
+    /* Search By House within 1KM radius given Geolocation */
     @Override
     public List<HouseResponse> searchByGeolocation(SearchRequest request){
 
         List<HouseResponse> responses = new ArrayList<>();
 
-        for(House house : houseRepository.findByGeolocation(request.getLatitude(), request.getLongitude())){
+        for(House house : houseRepository.findHousesByStatusTrueOrderByIdDesc()){
 
-            responses.add(modelToDto(house));
+            if(calculateDistance(house.getLatitude(), house.getLatitude(), request.getLatitude(), request.getLongitude()) <= 1.00){
+
+                responses.add(modelToDto(house));
+            }
         }
 
         return responses;
@@ -97,5 +98,21 @@ public class SearchServiceImpl implements SearchService {
                 .longitude(house.getLongitude())
                 .status(house.isStatus())
                 .build();
+    }
+
+    private double calculateDistance(double x1, double y1, double x2, double y2){
+
+        x1 = Math.toRadians(x1);
+        y1 = Math.toRadians(y1);
+        x2 = Math.toRadians(x2);
+        y2 = Math.toRadians(y2);
+
+        double d1 = x2 - x1;
+        double d2 = y2 - y1;
+
+        double a = Math.pow(Math.sin(d2 / 2), 2) + Math.cos(x1) * Math.cos(x2) * Math.pow(Math.sin(d1 / 2),2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+
+        return c * 6371;
     }
 }

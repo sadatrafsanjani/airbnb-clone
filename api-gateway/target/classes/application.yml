@@ -1,0 +1,26 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: RENTAL-PROCESSOR
+          uri: lb://RENTAL-PROCESSOR
+          predicates:
+            - Path=/api/rents/**, /api/bookings/**
+        - id: RENTAL-SEARCH
+          uri: lb://RENTAL-SEARCH
+          predicates:
+            - Path=/api/bookings/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
