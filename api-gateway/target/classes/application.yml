@@ -10,11 +10,12 @@ spring:
         - id: RENTAL-PROCESSOR
           uri: lb://RENTAL-PROCESSOR
           predicates:
-            - Path=/api/rents/**, /api/bookings/**
+            - Path=/api/rental/**
         - id: RENTAL-SEARCH
           uri: lb://RENTAL-SEARCH
           predicates:
-            - Path=/api/bookings/**
+            - Path=/api/search/**
+
 
 eureka:
   client:

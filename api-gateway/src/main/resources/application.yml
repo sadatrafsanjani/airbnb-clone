@@ -11,35 +11,11 @@ spring:
           uri: lb://RENTAL-PROCESSOR
           predicates:
             - Path=/api/rental/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: RENTAL-PROCESSOR
-                fallBackUri: forward:/rentalProcessorFallBack
         - id: RENTAL-SEARCH
           uri: lb://RENTAL-SEARCH
           predicates:
             - Path=/api/search/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: RENTAL-SEARCH
-                fallBackUri: forward:/rentalSearchFallBack
 
-hystrix:
-  command:
-    fallbackcmd:
-      execution:
-        isolation:
-          thread:
-            timeoutInMiliseconds: 4000
-
-
-manageemnt:
-  endpoints:
-    web:
-      exposure:
-        include: hystrix.stream
 
 eureka:
   client:

@@ -5,11 +5,13 @@ import com.search.dto.response.HouseResponse;
 import com.search.model.House;
 import com.search.repository.BookingRepository;
 import com.search.repository.HouseRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class SearchServiceImpl implements SearchService {
 
@@ -107,12 +109,13 @@ public class SearchServiceImpl implements SearchService {
         x2 = Math.toRadians(x2);
         y2 = Math.toRadians(y2);
 
-        double d1 = x2 - x1;
-        double d2 = y2 - y1;
+        double dLat = x2 - x1;
+        double dLon = y2 - y1;
 
-        double a = Math.pow(Math.sin(d2 / 2), 2) + Math.cos(x1) * Math.cos(x2) * Math.pow(Math.sin(d1 / 2),2);
-        double c = 2 * Math.asin(Math.sqrt(a));
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(x1) * Math.cos(x2) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        double c =  2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
+        log.info("--------------: " + c * 6371);
         return c * 6371;
     }
 }

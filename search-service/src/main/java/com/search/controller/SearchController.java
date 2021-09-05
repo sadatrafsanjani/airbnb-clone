@@ -6,10 +6,8 @@ import com.search.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -24,7 +22,7 @@ public class SearchController {
         this.searchService = searchService;
     }
 
-    @GetMapping("/searchByPriceRange")
+    @PostMapping("/searchByPriceRange")
     public ResponseEntity<List<HouseResponse>> searchByPriceRange(@RequestBody SearchRequest request){
 
         List<HouseResponse> responses = searchService.searchByPriceRange(request);
@@ -37,7 +35,7 @@ public class SearchController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/searchByLocation")
+    @PostMapping("/searchByLocation")
     public ResponseEntity<List<HouseResponse>> searchByLocation(@RequestBody SearchRequest request){
 
         List<HouseResponse> responses = searchService.searchByLocation(request);
@@ -50,7 +48,7 @@ public class SearchController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/searchByPriceRangeAndLocation")
+    @PostMapping("/searchByPriceRangeAndLocation")
     public ResponseEntity<List<HouseResponse>> searchByPriceRangeAndLocation(@RequestBody SearchRequest request){
 
         List<HouseResponse> responses = searchService.searchByPriceRangeAndLocation(request);
@@ -63,7 +61,7 @@ public class SearchController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/searchByGeolocation")
+    @PostMapping("/searchByGeolocation")
     public ResponseEntity<List<HouseResponse>> searchByGeolocation(@RequestBody SearchRequest request){
 
         List<HouseResponse> responses = searchService.searchByGeolocation(request);
