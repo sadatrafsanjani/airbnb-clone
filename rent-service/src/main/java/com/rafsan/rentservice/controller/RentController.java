@@ -1,6 +1,7 @@
 package com.rafsan.rentservice.controller;
 
 import com.rafsan.rentservice.dto.request.HouseRequest;
+import com.rafsan.rentservice.dto.request.HouseUpdateRequest;
 import com.rafsan.rentservice.dto.response.HouseResponse;
 import com.rafsan.rentservice.service.HouseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,6 @@ public class RentController {
     @Autowired
     public RentController(HouseService houseService) {
         this.houseService = houseService;
-    }
-
-    @GetMapping("/test")
-    public String test(){
-
-        return "Rent Service Testing";
     }
 
     @PostMapping
@@ -116,29 +111,29 @@ public class RentController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/approve/{id}")
-    ResponseEntity<?> approveHousePost(@PathVariable("id") long id){
+    @PutMapping("/approve")
+    ResponseEntity<?> approveHousePost(@RequestBody HouseUpdateRequest request){
 
-        HouseResponse response = houseService.approveHousePost(id);
+        HouseResponse response = houseService.approveHousePost(request);
 
         if(response != null){
 
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Access Denied!");
     }
 
-    @PutMapping("/reject/{id}")
-    ResponseEntity<?> rejectHousePost(@PathVariable("id") long id){
+    @PutMapping("/reject")
+    ResponseEntity<?> rejectHousePost(@RequestBody HouseUpdateRequest request){
 
-        HouseResponse response = houseService.rejectHousePost(id);
+        HouseResponse response = houseService.rejectHousePost(request);
 
         if(response != null){
 
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Access Denied!");
     }
 }

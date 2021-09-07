@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class ReviewRequest {
 
-    private long houseId;
+    private long bookingId;
     private long reviewerId;
     private String review;
     private int stars;

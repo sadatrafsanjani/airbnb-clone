@@ -3,7 +3,7 @@ package com.search.service;
 import com.search.dto.request.ReviewRequest;
 import com.search.dto.response.ReviewResponse;
 import com.search.model.Review;
-import com.search.repository.HouseRepository;
+import com.search.repository.BookingRepository;
 import com.search.repository.ReviewRepository;
 import com.search.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +14,16 @@ import java.util.List;
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
+    private BookingRepository bookingRepository;
     private ReviewRepository reviewRepository;
-    private HouseRepository houseRepository;
     private UserRepository userRepository;
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository,
-                             HouseRepository houseRepository,
+    public ReviewServiceImpl(BookingRepository bookingRepository,
+                             ReviewRepository reviewRepository,
                              UserRepository userRepository) {
+        this.bookingRepository = bookingRepository;
         this.reviewRepository = reviewRepository;
-        this.houseRepository = houseRepository;
         this.userRepository = userRepository;
     }
 
@@ -50,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         return Review
                 .builder()
-                .house(houseRepository.getById(request.getHouseId()))
+                .booking(bookingRepository.getById(request.getBookingId()))
                 .reviewer(userRepository.getById(request.getReviewerId()))
                 .review(request.getReview())
                 .stars(request.getStars())
@@ -62,7 +62,8 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewResponse
                 .builder()
                 .id(review.getId())
-                .houseId(review.getHouse().getId())
+                .houseId(review.getBooking().getHouse().getId())
+                .bookingId(review.getBooking().getId())
                 .reviewerId(review.getReviewer().getId())
                 .reviewerName(review.getReviewer().getUsername())
                 .review(review.getReview())

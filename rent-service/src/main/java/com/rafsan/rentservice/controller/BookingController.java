@@ -1,6 +1,8 @@
 package com.rafsan.rentservice.controller;
 
 import com.rafsan.rentservice.dto.request.BookingRequest;
+import com.rafsan.rentservice.dto.request.BookingUpdateRequest;
+import com.rafsan.rentservice.dto.request.HouseUpdateRequest;
 import com.rafsan.rentservice.dto.response.BookingResponse;
 import com.rafsan.rentservice.service.BookingService;
 import lombok.extern.slf4j.Slf4j;
@@ -88,23 +90,10 @@ public class BookingController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/approve/{id}")
-    ResponseEntity<?> approveBookingPost(@PathVariable("id") long id){
+    @PutMapping("/approve")
+    ResponseEntity<?> approveBookingPost(@RequestBody BookingUpdateRequest request){
 
-        BookingResponse response = bookingService.approveBooking(id);
-
-        if(response != null){
-
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/reject/{id}")
-    ResponseEntity<?> rejectBookingPost(@PathVariable("id") long id){
-
-        BookingResponse response = bookingService.rejectBooking(id);
+        BookingResponse response = bookingService.approveBooking(request);
 
         if(response != null){
 
@@ -114,10 +103,23 @@ public class BookingController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/cancel/{id}")
-    ResponseEntity<?> cancelBookingPost(@PathVariable("id") long id){
+    @PutMapping("/reject")
+    ResponseEntity<?> rejectBookingPost(@RequestBody BookingUpdateRequest request){
 
-        BookingResponse response = bookingService.cancelBooking(id);
+        BookingResponse response = bookingService.rejectBooking(request);
+
+        if(response != null){
+
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok("Access Denied!");
+    }
+
+    @PutMapping("/cancel")
+    ResponseEntity<?> cancelBookingPost(@RequestBody BookingUpdateRequest request){
+
+        BookingResponse response = bookingService.cancelBooking(request);
 
         if(response != null){
 

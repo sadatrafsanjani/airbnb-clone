@@ -45,7 +45,7 @@ public class SearchServiceImpl implements SearchService {
 
         List<HouseResponse> responses = new ArrayList<>();
 
-        for(House house : houseRepository.findByLocationAndStatusTrue(request.getLocation())){
+        for(House house : houseRepository.searchByLocation(request.getLocation())){
 
             responses.add(modelToDto(house));
         }

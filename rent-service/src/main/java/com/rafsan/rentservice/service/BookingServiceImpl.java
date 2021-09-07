@@ -1,35 +1,43 @@
 package com.rafsan.rentservice.service;
 
 import com.rafsan.rentservice.dto.request.BookingRequest;
+import com.rafsan.rentservice.dto.request.BookingUpdateRequest;
 import com.rafsan.rentservice.dto.response.BookingResponse;
 import com.rafsan.rentservice.model.Booking;
 import com.rafsan.rentservice.repository.BookingRepository;
 import com.rafsan.rentservice.repository.HouseRepository;
+import com.rafsan.rentservice.repository.RoleRepository;
 import com.rafsan.rentservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
     private BookingRepository bookingRepository;
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
     private HouseRepository houseRepository;
     private EmailService emailService;
 
     @Autowired
     public BookingServiceImpl(BookingRepository bookingRepository,
                               UserRepository userRepository,
+                              RoleRepository roleRepository,
                               HouseRepository houseRepository,
                               EmailService emailService) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.houseRepository = houseRepository;
         this.emailService = emailService;
     }
 
+    /* Find list of approved bookings */
     @Override
     public List<BookingResponse> findApprovedBookings(){
 
@@ -43,6 +51,7 @@ public class BookingServiceImpl implements BookingService {
         return responses;
     }
 
+    /* Find list of pending bookings */
     @Override
     public List<BookingResponse> findPendingBookings(){
 
@@ -56,6 +65,7 @@ public class BookingServiceImpl implements BookingService {
         return responses;
     }
 
+    /* Find list of house bookings by id */
     @Override
     public List<BookingResponse> findHouseBookingsById(long id){
 
@@ -69,6 +79,7 @@ public class BookingServiceImpl implements BookingService {
         return responses;
     }
 
+    /* Find list of bookings of a particular customer */
     @Override
     public List<BookingResponse> findBookingsByCustomerId(long id){
 
@@ -82,8 +93,9 @@ public class BookingServiceImpl implements BookingService {
         return responses;
     }
 
+    /* book a house */
     @Override
-    public BookingResponse saveBooking(BookingRequest request){
+    public synchronized BookingResponse saveBooking(BookingRequest request){
 
         if(bookingRepository.checkValidBookings(request.getCheckIn(), request.getCheckOut()).isEmpty()){
 
@@ -93,49 +105,71 @@ public class BookingServiceImpl implements BookingService {
         return null;
     }
 
+    /* Approve a house booking by Admin */
     @Override
-    public BookingResponse approveBooking(long id){
+    public BookingResponse approveBooking(BookingUpdateRequest request){
 
-        bookingRepository.approveBooking(id);
-        Booking booking = bookingRepository.getById(id);
+        if(userRepository.getById(request.getUserId()).getRoles().contains(roleRepository.findByRoleName("ROLE_ADMIN"))){
 
-        if(booking.isStatus()){
+            bookingRepository.approveBooking(request.getBookingId());
+            Booking booking = bookingRepository.getById(request.getBookingId());
 
-            emailService.notifyBookingApproval(booking.getCustomer().getEmail());
+            if(booking.isStatus()){
 
-            return modelToDto(booking);
+                emailService.notifyBookingApproval(booking.getCustomer().getEmail());
+
+                return modelToDto(booking);
+            }
         }
 
         return null;
     }
 
+    /* Reject a house booking by Admin */
     @Override
-    public BookingResponse rejectBooking(long id){
+    public BookingResponse rejectBooking(BookingUpdateRequest request){
 
-        bookingRepository.rejectBooking(id);
-        Booking booking = bookingRepository.getById(id);
+        if(userRepository.getById(request.getUserId()).getRoles().contains(roleRepository.findByRoleName("ROLE_ADMIN"))){
 
-        if(!booking.isRejection()){
+            bookingRepository.rejectBooking(request.getBookingId());
+            Booking booking = bookingRepository.getById(request.getBookingId());
 
-            emailService.notifyBookingRejection(booking.getCustomer().getEmail());
+            if(!booking.isRejection()){
 
-            return modelToDto(booking);
+                emailService.notifyBookingRejection(booking.getCustomer().getEmail());
+
+                return modelToDto(booking);
+            }
         }
 
         return null;
     }
 
+    /* Cancel a house booking at least 7 days before check in by Customer */
     @Override
-    public BookingResponse cancelBooking(long id){
+    public BookingResponse cancelBooking(BookingUpdateRequest request){
 
-        bookingRepository.cancelBooking(id);
-        Booking booking = bookingRepository.getById(id);
+        Booking booking = bookingRepository.getById(request.getUserId());
 
-        if(booking.isCancel()){
+        if(request.getUserId() == booking.getId()){
 
-            emailService.notifyBookingCancel(booking.getCustomer().getEmail());
+            Date currentDate = new Date(System.currentTimeMillis());
+            Date checkInDate = booking.getCheckIn();
+            long difference = checkInDate.getTime() - currentDate.getTime();
+            long days = TimeUnit.DAYS.convert(difference, TimeUnit.DAYS);
 
-            return modelToDto(booking);
+            if(days >= 7){
+
+                bookingRepository.cancelBooking(request.getBookingId());
+                booking = bookingRepository.getById(request.getBookingId());
+
+                if(booking.isCancel()){
+
+                    emailService.notifyBookingCancel(booking.getCustomer().getEmail());
+
+                    return modelToDto(booking);
+                }
+            }
         }
 
         return null;

@@ -10,6 +10,7 @@ import lombok.*;
 public class ReviewResponse {
 
     private Long id;
+    private long bookingId;
     private long houseId;
     private long reviewerId;
     private String reviewerName;

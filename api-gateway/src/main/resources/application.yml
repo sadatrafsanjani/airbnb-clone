@@ -7,6 +7,10 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: AUTHENTICATOR
+          uri: lb://AUTHENTICATOR
+          predicates:
+            - Path=/api/authenticator/**
         - id: RENTAL-PROCESSOR
           uri: lb://RENTAL-PROCESSOR
           predicates:

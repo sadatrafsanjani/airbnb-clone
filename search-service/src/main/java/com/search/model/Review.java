@@ -19,17 +19,17 @@ public class Review {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "HOUSE_ID")
-    private House house;
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "BOOKING_ID")
+    private Booking booking;
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "REVIEWER_ID")
     private User reviewer;
 
-    @Column(name = "CHECK_IN")
+    @Column(name = "REVIEW")
     private String review;
 
-    @Column(name = "STARTS")
+    @Column(name = "STARS")
     private int stars;
 }

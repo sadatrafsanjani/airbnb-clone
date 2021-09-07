@@ -1,12 +1,16 @@
 package com.rafsan.rentservice.service;
 
 import com.rafsan.rentservice.dto.request.HouseRequest;
+import com.rafsan.rentservice.dto.request.HouseUpdateRequest;
 import com.rafsan.rentservice.dto.response.HouseResponse;
 import com.rafsan.rentservice.model.House;
 import com.rafsan.rentservice.repository.HouseRepository;
+import com.rafsan.rentservice.repository.RoleRepository;
 import com.rafsan.rentservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +19,17 @@ public class HouseServiceImpl implements HouseService {
 
     private HouseRepository houseRepository;
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
     private EmailService emailService;
 
     @Autowired
     public HouseServiceImpl(HouseRepository houseRepository,
                             UserRepository userRepository,
+                            RoleRepository roleRepository,
                             EmailService emailService) {
         this.houseRepository = houseRepository;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.emailService = emailService;
     }
 
@@ -126,32 +133,40 @@ public class HouseServiceImpl implements HouseService {
 
     /* Approve House Post */
     @Override
-    public HouseResponse approveHousePost(long id){
+    public HouseResponse approveHousePost(HouseUpdateRequest request){
 
-        houseRepository.approveHousePost(id);
-        House house = houseRepository.getById(id);
+        if(userRepository.getById(request.getUserId()).getRoles().contains(roleRepository.findByRoleName("ROLE_ADMIN"))){
 
-        if(house.isStatus()){
-            emailService.notifyHouseApproval(house.getHost().getEmail());
+            houseRepository.approveHousePost(request.getHouseId());
+            House house = houseRepository.getById(request.getHouseId());
+
+            if(house.isStatus()){
+                emailService.notifyHouseApproval(house.getHost().getEmail());
+            }
+
+            return modelToDto(house);
         }
 
-        return modelToDto(house);
-
+        return null;
     }
 
     /* Reject House Post */
     @Override
-    public HouseResponse rejectHousePost(long id){
+    public HouseResponse rejectHousePost(HouseUpdateRequest request){
 
-        houseRepository.rejectHousePost(id);
-        House house = houseRepository.getById(id);
+        if(userRepository.getById(request.getUserId()).getRoles().contains(roleRepository.findByRoleName("ROLE_ADMIN"))){
 
-        if(house.isStatus()){
-            emailService.notifyHouseRejection(house.getHost().getEmail());
+            houseRepository.rejectHousePost(request.getHouseId());
+            House house = houseRepository.getById(request.getHouseId());
+
+            if(house.isStatus()){
+                emailService.notifyHouseRejection(house.getHost().getEmail());
+            }
+
+            return modelToDto(house);
         }
 
-        return modelToDto(house);
-
+        return null;
     }
 
     private House dtoToModel(HouseRequest request){

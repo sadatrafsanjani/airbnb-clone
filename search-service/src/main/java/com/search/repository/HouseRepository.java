@@ -12,9 +12,10 @@ public interface HouseRepository extends JpaRepository<House, Long> {
     @Query("SELECT H FROM House H WHERE H.price >= :minPrice AND H.price <= :maxPrice AND H.status = true")
     List<House> findByPriceRange(double minPrice, double maxPrice);
 
-    List<House> findByLocationAndStatusTrue(String location);
+    @Query("SELECT H FROM House H WHERE H.location LIKE %:location% AND H.status = true")
+    List<House> searchByLocation(String location);
 
-    @Query("SELECT H FROM House H WHERE H.price >= :minPrice AND H.price <= :maxPrice AND H.location = :location AND H.status = true")
+    @Query("SELECT H FROM House H WHERE H.price >= :minPrice AND H.price <= :maxPrice AND H.location LIKE %:location% AND H.status = true")
     List<House> findByPriceRangeAndLocation(double minPrice, double maxPrice, String location);
 
     List<House> findHousesByStatusTrueOrderByIdDesc();

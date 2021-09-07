@@ -1,6 +1,7 @@
 package com.rafsan.rentservice.service;
 
 import com.rafsan.rentservice.dto.request.HouseRequest;
+import com.rafsan.rentservice.dto.request.HouseUpdateRequest;
 import com.rafsan.rentservice.dto.response.HouseResponse;
 import java.util.List;
 
@@ -13,6 +14,6 @@ public interface HouseService {
     HouseResponse findByHouseId(long id);
     List<HouseResponse> findApprovedHousesByHostId(long id);
     List<HouseResponse> findPendingHousesByHostId(long id);
-    HouseResponse approveHousePost(long id);
-    HouseResponse rejectHousePost(long id);
+    HouseResponse approveHousePost(HouseUpdateRequest request);
+    HouseResponse rejectHousePost(HouseUpdateRequest request);
 }
