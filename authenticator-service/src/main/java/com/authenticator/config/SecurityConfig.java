@@ -24,16 +24,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] AUTH_WHITELIST = {
 
-            "/api/authentication/**"
+            "/api/authenticator/authentication/**"
     };
 
     private static final String[] AUTH_WHITELIST_POST = {
-            "/api/authentication/check/**",
-            "/api/authentication/password/**"
-    };
-
-    private static final String[] AUTH_WHITELIST_PUT = {
-            ""
+            "/api/authenticator/authentication/check/**"
     };
 
     @Autowired
@@ -95,7 +90,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     .antMatchers(AUTH_WHITELIST).permitAll()
                     .antMatchers(HttpMethod.POST, AUTH_WHITELIST_POST).permitAll()
-                    .antMatchers(HttpMethod.PUT, AUTH_WHITELIST_PUT).permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
