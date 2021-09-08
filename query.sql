@@ -12,7 +12,7 @@ CREATE TABLE square.public.USERS (
     USERNAME VARCHAR(255) UNIQUE NOT NULL,
     PASSWORD VARCHAR(255) NOT NULL,
     EMAIL VARCHAR(255) UNIQUE NOT NULL,
-	VERIFIED BOOLEAN DEFAULT FALSE
+	STATUS BOOLEAN DEFAULT FALSE
 );
 
 
@@ -84,12 +84,12 @@ CREATE TABLE square.public.REVIEWS (
 
 
 
-INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, VERIFIED) VALUES ('admin','$2a$10$stY59P7EmX7HNbUKiIVBXueYq6Gcc7/rVbUM3wChykyLcBudoUkdm', 'sadat.rafsanjani@dbbl.com', true);
-INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, VERIFIED) VALUES ('rafsan','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com', true);
-INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, VERIFIED) VALUES ('jeff','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com1', true);
-INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, VERIFIED) VALUES ('indy','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com2', true);
-INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, VERIFIED) VALUES ('peter','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com3', true);
-INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, VERIFIED) VALUES ('linda','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com4', true);
+INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, STATUS) VALUES ('admin','$2a$10$stY59P7EmX7HNbUKiIVBXueYq6Gcc7/rVbUM3wChykyLcBudoUkdm', 'sadat.rafsanjani@dbbl.com', true);
+INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, STATUS) VALUES ('rafsan','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com', true);
+INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, STATUS) VALUES ('jeff','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com1', true);
+INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, STATUS) VALUES ('indy','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com2', true);
+INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, STATUS) VALUES ('peter','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com3', true);
+INSERT INTO square.public.USERS (USERNAME, PASSWORD, EMAIL, STATUS) VALUES ('linda','$2a$10$V2y9AJRW/dLoiaENmCliiOMT0OwSVQsFSplViK44zcBqsqyO90CoW', 'sadatrafsanjani@gmail.com4', true);
 
 INSERT INTO square.public.ROLES (ROLE) VALUES ('ROLE_ADMIN');
 INSERT INTO square.public.ROLES (ROLE) VALUES ('ROLE_USER');

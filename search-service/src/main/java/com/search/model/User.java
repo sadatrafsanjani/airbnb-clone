@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -31,6 +30,8 @@ public class User {
     @Column(name = "EMAIL", unique = true)
     private String email;
 
+    @Column(name = "STATUS")
+    private String status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

@@ -4,6 +4,19 @@ server:
 spring:
   application:
     name: AUTHENTICATOR
+  mail:
+    host: smtp.mailtrap.io
+    port: 587
+    username: 0fef9003c9fde2
+    password: ca86576b238fe5
+    properties:
+      mail:
+        smtp:
+          auth: PLAIN
+          starttls:
+            enable: true
+    protocol: smtp
+    tls: true
 
 eureka:
   client:

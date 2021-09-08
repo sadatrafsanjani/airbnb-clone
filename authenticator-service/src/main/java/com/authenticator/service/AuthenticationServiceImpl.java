@@ -79,8 +79,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = jwtService.generateTokenWithUsername(request.getUsername());
         User user = userService.findByUsername(request.getUsername());
 
-        byte[] picture = user.getPicture();
-
         return LoginResponse.builder()
                 .id(user.getId())
                 .username(request.getUsername())

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -31,14 +30,8 @@ public class User {
     @Column(name = "EMAIL", unique = true)
     private String email;
 
-    @Column(name = "PICTURE")
-    private byte[] picture;
-
     @Column(name = "STATUS")
     private boolean status;
-
-    @Column(name = "SINCE")
-    private Instant since;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

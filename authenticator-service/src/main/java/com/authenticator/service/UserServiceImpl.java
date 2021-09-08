@@ -19,14 +19,17 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private EmailService emailService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     private String encodePassword(String password) {
@@ -137,8 +140,9 @@ public class UserServiceImpl implements UserService {
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(encodePassword(registerRequest.getPassword()));
-
+        user.setStatus(false);
         User newUser = saveUser(user);
+        emailService.verifyNotification(newUser.getEmail(), newUser.getId());
 
         return newUser != null;
     }
@@ -158,5 +162,11 @@ public class UserServiceImpl implements UserService {
         User newUser = saveUser(user);
 
         return newUser != null;
+    }
+
+    @Override
+    public void verifyEmail(long userId){
+
+        userRepository.verifyEmail(userId);
     }
 }

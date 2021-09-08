@@ -17,4 +17,5 @@ public interface UserService extends UserDetailsService {
     UserResponse getUserById(long id);
     boolean register(RegisterRequest registerRequest);
     boolean createAdmin(RegisterRequest registerRequest);
+    void verifyEmail(long userId);
 }
