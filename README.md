@@ -1,17 +1,18 @@
 Background:
 
-This application is consists of five modules:
+This application consists of five modules:
 
-1) Authenticator service
-2) Service Registry
-3) API Gateway
-4) Rental Processor
-5) Rental Search
+1) Authenticator service: For issuing JWT token and refresh it after timeout
+2) Rental Processor: Required rental APIs
+3) Rental Search: Required search APIs
+4) Service Registry: For service discovery
+5) API Gateway: For service path
 
-The authenticator service generates a JWT token with refresh token and expiration time which is saved on database. 
-Every other micro-service (rental processor/search) is secured and requres this JWT token to accept request. 
+The authenticator service generates a JWT token with refresh token and expiration time which is saved in database. 
+Every other micro-service (rental processor/search) is secured and requires this JWT token to accept request. 
 
-The Booking api calls rental processor from rental search and it is concurrency enabled. All api has been implemented as required.
+The Booking api calls rental processor from rental search and it is concurrency enabled. 
+All api has been implemented as required.
 
 
 Technology:
