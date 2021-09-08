@@ -26,3 +26,23 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   instance:
     hostname: localhost
+
+
+jwt:
+  expiration:
+    time: 900000
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    beans:
+      enabled: true
+  endpoints:
+    web:
+      cors:
+        allowed-methods: OPTIONS, GET, POST
+        allowed-headers: "*"
+        allowed-origins: "*"
+      exposure:
+        include: "*"
